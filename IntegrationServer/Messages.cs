@@ -138,9 +138,40 @@ namespace IntegrationServer
         public Info info { get; set; }
         public List<object> workflowItems { get; set; }
         public List<Page> pages { get; set; }
-        public List<object> properties { get; set; }
+        public List<Property> properties { get; set; }
+    }
+
+    public class ChildProperty
+    {
+        public string id { get; set; }
+        public string type { get; set; }
+        public string value { get; set; }
+    }
+
+    public class Property
+    {
+        public string id { get; set; }
+        public string type { get; set; }
+        public string value { get; set; }
+        public List<ChildProperty> childProperties { get; set; }
     }
 
 
+    public class CProperty
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+        public string type { get; set; }
+    }
+
+    public class CustomProperties
+    {
+        public List<CProperty> properties { get; set; }
+    }
+
+    public class Pages
+    {
+        public List<Page> pages { get; set; }
+    }
 
 }

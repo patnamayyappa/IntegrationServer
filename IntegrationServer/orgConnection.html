@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>hello</title>
+    <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+    <script src="jquery_1.12.3.min.js"></script>
+</head>
+<body>
+
+    <script type="text/javascript">
+        var microsoftTokenUrl = "https://login.microsoftonline.com/a38ff870-9c86-43df-9e6b-6b01f206a398/oauth2/token"; //Add your endpoint URL
+        var clientId = "853005d6-4308-4a3a-901e-da83f929f789"; // Add your app ID
+        var clientSecret = "n_7ZXzU8pcoT96C1hR3-Zhtnb.Iiw0X~A.";//Add your Secret Key
+        var resource = "https://600001.crm.dynamics.com/";//Add your CRM Url
+        var grantType = "client_credentials";
+        function GetAuthroisationToken() {
+            var token = null;
+            //$.ajax({
+            //    url: microsoftTokenUrl,
+            //    type: "POST",
+            //    contentType: "application/x-www-form-urlencoded",
+            //    crossDomain: true,
+            //    dataType: "json",
+            //    format: "json",
+            //    async: false,
+            //    data: {
+            //        'resource': resource,
+            //        'client_id': clientId,
+            //        'redirect_uri':"app://58145b91-0c36-4500-8554-080854f2ac97/",
+            //        //'scope':resource,
+            //        'client_secret': clientSecret,
+            //        'grant_type': grantType
+            //    },
+            //    //data:'grant_type=client_credentials&client_id=853005d6-4308-4a3a-901e-da83f929f789&resource=https%3A%2F%2F600001.crm.dynamics.com%2F&client_secret=n_7ZXzU8pcoT96C1hR3-Zhtnb.Iiw0X~A.',
+            //    beforeSend: function (XMLHttpRequest) {
+            //        XMLHttpRequest.setRequestHeader("Accept", "application/json");
+            //        XMLHttpRequest.setRequestHeader("Access-Control-Allow-Origin", "http://localhost/");
+            //    },
+            //    success: function (data, textStatus, xhr) {
+            //        debugger;
+            //        token = data.access_token;
+            //    },
+            //    error: function (xhr, textStatus, errorThrown) {
+            //        debugger;
+            //        console.log(xhr.statusText);
+            //        console.log(textStatus);
+            //        console.log(errorThrown);
+            //    }
+            //});
+
+            //$.ajax({
+            //    url: "https://900014engage-sb1.azurewebsites.net/api/GetToken?code=vpK58KXUyHxzkTO5BFA6GOpPQowwCaQNxOUfJhx08kzXcMPmwaPT3A==",
+            //    type: "GET",
+            //    contentType: "application/x-www-form-urlencoded",
+            //    crossDomain: true,
+            //    dataType: "json",
+            //    format: "json",
+            //    async: false,
+            //    //data: {
+            //    //    'resource': resource,
+            //    //    'client_id': clientId,
+            //    //    //'scope':resource,
+            //    //    'client_secret': clientSecret,
+            //    //    'grant_type': grantType
+            //    //},
+            //    //data:'grant_type=client_credentials&client_id=853005d6-4308-4a3a-901e-da83f929f789&resource=https%3A%2F%2F600001.crm.dynamics.com%2F&client_secret=n_7ZXzU8pcoT96C1hR3-Zhtnb.Iiw0X~A.',
+            //    //beforeSend: function (XMLHttpRequest) {
+            //    //    XMLHttpRequest.setRequestHeader("Accept", "application/json");
+            //    //    XMLHttpRequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+            //    //},
+            //    success: function (data, textStatus, xhr) {
+            //        debugger;
+            //        token = data.access_token;
+            //    },
+            //    error: function (xhr, textStatus, errorThrown) {
+            //        debugger;
+            //        console.log(xhr.statusText);
+            //        console.log(textStatus);
+            //        console.log(errorThrown);
+            //    }
+            //});
+
+            var userName = "patnama";
+            var passWord = "B18lp@yment";
+
+            $.ajax({
+                type: "GET",
+                contentType: "application/octet-stream",
+                url: "https://cltpocfe1.dev.campusmgmt.com:8443/integrationserver/document/321Z56M_002X69H4100002D/page/321Z56M_002X6KH4100003X/file",
+                dataType: 'json',
+                //data: JSON.stringify(data),
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("Authorization", authenticateUser(userName, passWord));
+                    XMLHttpRequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+                    XMLHttpRequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+                },
+                async: false,
+                success: function (data) {
+                    debugger;
+                    if (data) {
+                        var arrBuffer = base64ToArrayBuffer(data.documentbody);
+
+                        var blob = new Blob([arrBuffer], { type: "application/pdf" });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = data.filename;
+                        link.click();
+                    }
+
+                },
+                error: function (xhr) {
+                    debugger;
+                    //openAlertDialog(resourceStrings.Unexpected_Error);
+                }
+            });
+
+            return token;
+        }
+
+        function authenticateUser(user, password) {
+            var token = user + ":" + password;
+
+            // Should i be encoding this value????? does it matter???
+            // Base64 Encoding -> btoa
+            var hash = btoa(token);
+            return "Basic " + hash;
+        }
+
+    </script>
+
+    <div>
+        <button onclick="GetAuthroisationToken()"> click here</button>
+    </div>
+</body>
+</html>
